@@ -219,6 +219,7 @@ if [ "$ACTION" = "export" ]; then
     fi
 
     echo "Validating certificate files..."
+    echo
     ls -1 /etc/letsencrypt/live | grep -v README | while read domain; do
         if [ -n "$domain" ]; then
             # Validate certificate
@@ -249,6 +250,7 @@ if [ "$ACTION" = "export" ]; then
 
     # Create backup archive with verification
     echo "Creating certificate backup..."
+    echo
     if tar --preserve-permissions -czf "$BACKUP_FILE" -C /etc letsencrypt/; then
         echo -e "${GREEN}✓${NC} Backup created successfully"
         

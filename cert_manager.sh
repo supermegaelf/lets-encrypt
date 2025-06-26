@@ -173,7 +173,6 @@ else
                 echo
                 # Request Cloudflare credentials immediately after choosing import
                 echo -e "${CYAN}Please enter the required information:${NC}"
-                echo
                 setup_cloudflare_credentials
                 break
                 ;;
@@ -328,7 +327,6 @@ if [ "$ACTION" = "import" ]; then
 
     # Critical: Verify archive integrity and content
     echo "Verifying archive integrity..."
-    echo
     if ! tar -tzf "$BACKUP_FILE" >/dev/null 2>&1; then
         echo -e "${RED}✗${NC} Archive is corrupted or invalid!"
         log_operation "IMPORT: FAILED - corrupted archive"
@@ -393,7 +391,6 @@ if [ "$ACTION" = "import" ]; then
         echo -e "${YELLOW}[DRY-RUN] Would validate Cloudflare credentials${NC}"
     else
         echo "Checking Cloudflare API..."
-        echo
         if validate_cloudflare_credentials; then
             echo -e "${GREEN}✓${NC} Cloudflare credentials validated"
         else
@@ -420,7 +417,6 @@ if [ "$ACTION" = "import" ]; then
             echo -e "${YELLOW}[DRY-RUN] Would backup existing certificates${NC}"
         else
             echo "Creating backup of existing certificates..."
-            echo
             cp -r /etc/letsencrypt "/etc/letsencrypt.backup.$BACKUP_TIMESTAMP"
             echo -e "${GREEN}✓${NC} Existing data backed up"
             log_operation "IMPORT: Backed up existing certs to backup.$BACKUP_TIMESTAMP"
@@ -445,7 +441,6 @@ if [ "$ACTION" = "import" ]; then
         echo -e "${YELLOW}[DRY-RUN] Would extract certificates to /etc/${NC}"
     else
         echo "Extracting certificate archive..."
-        echo
         # Remove existing letsencrypt directory
         rm -rf /etc/letsencrypt
         
@@ -494,7 +489,6 @@ if [ "$ACTION" = "import" ]; then
         echo -e "${YELLOW}[DRY-RUN] Would check and fix certificate symlink structure${NC}"
     else
         echo "Checking and fixing certificate structure..."
-        echo
         for live_dir in /etc/letsencrypt/live/*/; do
             [ ! -d "$live_dir" ] && continue
 
@@ -574,7 +568,6 @@ if [ "$ACTION" = "import" ]; then
         echo -e "${YELLOW}[DRY-RUN] Would update renewal configurations${NC}"
     else
         echo "Updating renewal configurations..."
-        echo
         for conf_file in /etc/letsencrypt/renewal/*.conf; do
             [ ! -f "$conf_file" ] && continue
 
@@ -620,7 +613,6 @@ EOF
         echo -e "${YELLOW}[DRY-RUN] Would verify certificates with 'certbot certificates'${NC}"
     else
         echo "Performing critical certificate validation..."
-        echo
         # Test certbot can read the certificates
         if ! certbot certificates >/dev/null 2>&1; then
             echo -e "${RED}✗${NC} Critical error: Certbot cannot read imported certificates"
@@ -712,7 +704,6 @@ EOF
         echo -e "${YELLOW}[DRY-RUN] Would remove backup archive${NC}"
     else
         echo "Removing backup archive..."
-        echo
         rm -f "$BACKUP_FILE"
         echo -e "${GREEN}✓${NC} Backup archive removed"
         log_operation "IMPORT: Completed successfully, cleaned up $BACKUP_FILE"

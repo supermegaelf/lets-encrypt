@@ -71,18 +71,18 @@ setup_cloudflare_credentials() {
         return 0
     fi
 
-    # Cloudflare API Key
-    read -p "Cloudflare API Key: " CLOUDFLARE_API_KEY
-    while [[ -z "$CLOUDFLARE_API_KEY" ]]; do
-        echo -e "${RED}Cloudflare API Key cannot be empty!${NC}"
-        read -p "Cloudflare API Key: " CLOUDFLARE_API_KEY
-    done
-
     # Cloudflare Email
     read -p "Cloudflare Email: " CLOUDFLARE_EMAIL
     while [[ -z "$CLOUDFLARE_EMAIL" ]]; do
         echo -e "${RED}Cloudflare Email cannot be empty!${NC}"
         read -p "Cloudflare Email: " CLOUDFLARE_EMAIL
+    done
+
+    # Cloudflare API Key
+    read -p "Cloudflare API Key: " CLOUDFLARE_API_KEY
+    while [[ -z "$CLOUDFLARE_API_KEY" ]]; do
+        echo -e "${RED}Cloudflare API Key cannot be empty!${NC}"
+        read -p "Cloudflare API Key: " CLOUDFLARE_API_KEY
     done
 
     # Create credentials directory

@@ -172,7 +172,7 @@ else
                 check_production_environment
                 echo
                 # Request Cloudflare credentials immediately after choosing import
-                echo -e "${NC}Setting up Cloudflare credentials...${NC}"
+                echo -e "${CYAN}Please enter the required information:${NC}"
                 echo
                 setup_cloudflare_credentials
                 break
@@ -308,7 +308,7 @@ if [ "$ACTION" = "import" ]; then
     # Production confirmation for import
     if [ "$DRY_RUN" != true ]; then
         # Request Cloudflare credentials for command line import
-        echo -e "${NC}Setting up Cloudflare credentials...${NC}"
+        echo -e "${CYAN}Please enter the required information:${NC}"
         echo
         setup_cloudflare_credentials
     fi

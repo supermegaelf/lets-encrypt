@@ -86,6 +86,7 @@ setup_cloudflare_credentials() {
     done
 
     # Create credentials directory
+    echo
     echo "Creating credentials directory..."
     mkdir -p "$(dirname "$CREDENTIALS_PATH")"
 

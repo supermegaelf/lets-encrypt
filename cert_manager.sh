@@ -99,7 +99,7 @@ dns_cloudflare_api_token = $CLOUDFLARE_API_KEY
 EOL
         log_operation "SETUP: Created Cloudflare credentials with API Token"
     else
-        echo -e "${GREEN}Detected Global API Key format${NC}"
+        echo -e "${NC}Detected Global API Key format${NC}"
         cat > "$CREDENTIALS_PATH" <<EOL
 # Cloudflare Global API Key
 dns_cloudflare_email = $CLOUDFLARE_EMAIL
@@ -111,6 +111,7 @@ EOL
     # Set proper permissions
     chmod 600 "$CREDENTIALS_PATH"
     echo -e "${GREEN}✓${NC} Cloudflare credentials configured successfully"
+    echo
     echo -e "${BLUE}Credentials saved to: $CREDENTIALS_PATH${NC}"
 }
 

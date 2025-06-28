@@ -729,7 +729,6 @@ EOF
     
     if [ "$DRY_RUN" != true ]; then
         echo -e "${CYAN}Imported Certificates:${NC}"
-        echo
         ls -1 /etc/letsencrypt/live 2>/dev/null | grep -v README | while read domain; do
             if [ -n "$domain" ]; then
                 echo "$domain"

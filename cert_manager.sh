@@ -235,12 +235,12 @@ if [ "$ACTION" = "export" ]; then
 
     echo
     echo -e "${GREEN}------------------------------------${NC}"
-    echo -e "${NC}✓ Certificate validation completed!${NC}"
+    echo -e "${GREEN}✓${NC} Certificate validation completed!"
     echo -e "${GREEN}------------------------------------${NC}"
     echo
 
     echo -e "${GREEN}===================${NC}"
-    echo -e "${NC}2. Creating backup${NC}"
+    echo -e "${NC}2. Creating backup"
     echo -e "${GREEN}===================${NC}"
     echo
 
@@ -275,12 +275,12 @@ if [ "$ACTION" = "export" ]; then
 
     echo
     echo -e "${GREEN}--------------------------------${NC}"
-    echo -e "${NC}✓ Certificate export completed!${NC}"
+    echo -e "${GREEN}✓${NC} Certificate export completed!"
     echo -e "${GREEN}--------------------------------${NC}"
     echo
 
     echo -e "${GREEN}=============================================${NC}"
-    echo -e "${NC}✓ Certificate export completed successfully!${NC}"
+    echo -e "${GREEN}✓${NC} Certificate export completed successfully!"
     echo -e "${GREEN}=============================================${NC}"
     echo
     echo -e "${CYAN}Export Information:${NC}"
@@ -354,7 +354,7 @@ if [ "$ACTION" = "import" ]; then
 
     echo
     echo -e "${GREEN}----------------------------------${NC}"
-    echo -e "${NC}✓ Archive verification completed!${NC}"
+    echo -e "${GREEN}✓${NC} Archive verification completed!"
     echo -e "${GREEN}----------------------------------${NC}"
     echo
 
@@ -379,7 +379,7 @@ if [ "$ACTION" = "import" ]; then
 
     echo
     echo -e "${GREEN}----------------------------------${NC}"
-    echo -e "${NC}✓ Certbot installation completed!${NC}"
+    echo -e "${GREEN}✓${NC} Certbot installation completed!"
     echo -e "${GREEN}----------------------------------${NC}"
     echo
 
@@ -404,7 +404,7 @@ if [ "$ACTION" = "import" ]; then
 
     echo
     echo -e "${GREEN}-----------------------------------${NC}"
-    echo -e "${NC}✓ Credential validation completed!${NC}"
+    echo -e "${GREEN}✓${NC} Credential validation completed!"
     echo -e "${GREEN}-----------------------------------${NC}"
     echo
 
@@ -429,7 +429,7 @@ if [ "$ACTION" = "import" ]; then
 
     echo
     echo -e "${GREEN}-------------------------${NC}"
-    echo -e "${NC}✓ Data backup completed!${NC}"
+    echo -e "${GREEN}✓${NC} Data backup completed!"
     echo -e "${GREEN}-------------------------${NC}"
     echo
 
@@ -477,7 +477,7 @@ if [ "$ACTION" = "import" ]; then
 
     echo
     echo -e "${GREEN}------------------------------------${NC}"
-    echo -e "${NC}✓ Certificate extraction completed!${NC}"
+    echo -e "${GREEN}✓${NC} Certificate extraction completed!"
     echo -e "${GREEN}------------------------------------${NC}"
     echo
 
@@ -545,7 +545,7 @@ if [ "$ACTION" = "import" ]; then
 
     echo
     echo -e "${GREEN}------------------------------${NC}"
-    echo -e "${NC}✓ Structure fixing completed!${NC}"
+    echo -e "${GREEN}✓${NC} Structure fixing completed!"
     echo -e "${GREEN}------------------------------${NC}"
     echo
 
@@ -601,7 +601,7 @@ EOF
 
     echo
     echo -e "${GREEN}---------------------------${NC}"
-    echo -e "${NC}✓ Config update completed!${NC}"
+    echo -e "${GREEN}✓${NC} Config update completed!"
     echo -e "${GREEN}---------------------------${NC}"
     echo
 
@@ -655,7 +655,7 @@ EOF
 
     echo
     echo -e "${GREEN}--------------------------------------${NC}"
-    echo -e "${NC}✓ Certificate verification completed!${NC}"
+    echo -e "${GREEN}✓${NC} Certificate verification completed!"
     echo -e "${GREEN}--------------------------------------${NC}"
     echo
 
@@ -692,7 +692,7 @@ EOF
 
     echo
     echo -e "${GREEN}--------------------------${NC}"
-    echo -e "${NC}✓ Renewal test completed!${NC}"
+    echo -e "${GREEN}✓${NC} Renewal test completed!"
     echo -e "${GREEN}--------------------------${NC}"
     echo
 
@@ -713,22 +713,23 @@ EOF
 
     echo
     echo -e "${GREEN}---------------------${NC}"
-    echo -e "${NC}✓ Cleanup completed!${NC}"
+    echo -e "${GREEN}✓${NC} Cleanup completed!"
     echo -e "${GREEN}---------------------${NC}"
     echo
 
     echo -e "${GREEN}=============================================${NC}"
     if [ "$DRY_RUN" = true ]; then
-        echo -e "${NC}✓ Certificate import DRY-RUN completed successfully!${NC}"
+        echo -e "${GREEN}✓${NC} Certificate import DRY-RUN completed successfully!"
         echo -e "${CYAN}No changes were made to the system.${NC}"
     else
-        echo -e "${NC}✓ Certificate import completed successfully!${NC}"
+        echo -e "${GREEN}✓${NC} Certificate import completed successfully!"
     fi
     echo -e "${GREEN}=============================================${NC}"
     echo
     
     if [ "$DRY_RUN" != true ]; then
         echo -e "${CYAN}Imported Certificates:${NC}"
+        echo
         ls -1 /etc/letsencrypt/live 2>/dev/null | grep -v README | while read domain; do
             if [ -n "$domain" ]; then
                 echo "$domain"

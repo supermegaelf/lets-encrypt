@@ -10,11 +10,11 @@ CYAN='\033[0;36m'
 WHITE='\033[1;37m'
 NC='\033[0m'
 
-# Let's Encrypt Certificate Management Script
+# Let's Encrypt Certificate Setup Script
 echo
-echo -e "${PURPLE}==================================${NC}"
-echo -e "${WHITE}LET'S ENCRYPT CERTIFICATE MANAGER${NC}"
-echo -e "${PURPLE}==================================${NC}"
+echo -e "${PURPLE}==========================${NC}"
+echo -e "${WHITE}LET'S ENCRYPT CERTIFICATE${NC}"
+echo -e "${PURPLE}==========================${NC}"
 
 # Logging function
 log_operation() {

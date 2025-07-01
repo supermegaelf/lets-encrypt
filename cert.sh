@@ -30,7 +30,7 @@ check_root_privileges() {
 }
 
 check_production_environment() {
-    echo -e "${YELLOW}Are you sure you want to continue? (y/N)${NC}"
+    echo -ne "${YELLOW}Are you sure you want to continue? (y/N): ${NC}"
     read -r CONFIRM
     if [[ ! "$CONFIRM" =~ ^[Yy]$ ]]; then
         echo -e "${YELLOW}Operation cancelled by user${NC}"
@@ -72,17 +72,21 @@ setup_cloudflare_credentials() {
     fi
 
     # Cloudflare Email
-    read -p "Cloudflare Email: " CLOUDFLARE_EMAIL
+    echo -ne "${CYAN}Cloudflare Email: ${NC}"
+    read CLOUDFLARE_EMAIL
     while [[ -z "$CLOUDFLARE_EMAIL" ]]; do
         echo -e "${RED}Cloudflare Email cannot be empty!${NC}"
-        read -p "Cloudflare Email: " CLOUDFLARE_EMAIL
+        echo -ne "${CYAN}Cloudflare Email: ${NC}"
+        read CLOUDFLARE_EMAIL
     done
 
     # Cloudflare API Key
-    read -p "Cloudflare API Key: " CLOUDFLARE_API_KEY
+    echo -ne "${CYAN}Cloudflare API Key: ${NC}"
+    read CLOUDFLARE_API_KEY
     while [[ -z "$CLOUDFLARE_API_KEY" ]]; do
         echo -e "${RED}Cloudflare API Key cannot be empty!${NC}"
-        read -p "Cloudflare API Key: " CLOUDFLARE_API_KEY
+        echo -ne "${CYAN}Cloudflare API Key: ${NC}"
+        read CLOUDFLARE_API_KEY
     done
 
     # Create credentials directory
@@ -161,7 +165,8 @@ else
     echo
     
     while true; do
-        read -p "Enter your choice (1-3): " CHOICE
+        echo -ne "${CYAN}Enter your choice (1-3): ${NC}"
+        read CHOICE
         case $CHOICE in
             1)
                 ACTION="export"
@@ -679,7 +684,8 @@ EOF
             echo -e "${YELLOW}Check Cloudflare credentials and DNS settings${NC}"
             log_operation "IMPORT: Renewal test FAILED"
             
-            read -p "Continue despite renewal test failure? (y/N): " CONTINUE_ANYWAY
+            echo -ne "${YELLOW}Continue despite renewal test failure? (y/N): ${NC}"
+            read CONTINUE_ANYWAY
             if [[ ! "$CONTINUE_ANYWAY" =~ ^[Yy]$ ]]; then
                 echo -e "${YELLOW}Import cancelled by user${NC}"
                 rollback

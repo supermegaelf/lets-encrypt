@@ -670,12 +670,10 @@ EOF
     else
         echo "Testing certificate renewal..."
         if certbot renew --dry-run 2>/dev/null; then
-            echo
             echo -e "${GREEN}✓${NC} Certificate renewal test PASSED"
             echo -e "${GREEN}✓${NC} All certificates are ready for automatic renewal"
             log_operation "IMPORT: Renewal test PASSED"
         else
-            echo
             echo -e "${RED}✗${NC} Certificate renewal test FAILED"
             echo -e "${YELLOW}Certificate renewal may not work${NC}"
             echo -e "${YELLOW}Check Cloudflare credentials and DNS settings${NC}"

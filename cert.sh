@@ -178,8 +178,6 @@ else
                 check_production_environment
                 echo
                 # Request Cloudflare credentials immediately after choosing import
-                echo -e "${CYAN}Please enter the required information:${NC}"
-                echo
                 setup_cloudflare_credentials
                 break
                 ;;

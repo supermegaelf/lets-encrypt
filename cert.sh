@@ -8,7 +8,7 @@ BLUE='\033[0;34m'
 PURPLE='\033[0;35m'
 CYAN='\033[0;36m'
 WHITE='\033[1;37m'
-GRAY='\033[0;37m'
+GRAY='\033[0;90m'
 NC='\033[0m'
 
 # Status symbols

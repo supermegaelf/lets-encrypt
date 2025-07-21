@@ -691,8 +691,9 @@ EOF
             log_operation "IMPORT: Renewal test PASSED"
         else
             echo -e "${RED}${CROSS}${NC} Certificate renewal test FAILED"
-            echo -e "${YELLOW}Certificate renewal may not work${NC}"
-            echo -e "${YELLOW}Check Cloudflare credentials and DNS settings${NC}"
+            echo
+            echo -e "${YELLOW}Certificate renewal may not work.${NC}"
+            echo -e "${YELLOW}Check Cloudflare credentials and DNS settings.${NC}"
             log_operation "IMPORT: Renewal test FAILED"
             
             echo -ne "${YELLOW}Continue despite renewal test failure? (y/N): ${NC}"

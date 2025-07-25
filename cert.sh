@@ -140,31 +140,36 @@ input_cloudflare_api_key() {
 # Setup Cloudflare credentials
 setup_cloudflare_credentials() {
     if [ -f "$CREDENTIALS_PATH" ]; then
+        load_existing_credentials
         return 0
     fi
 
     input_cloudflare_email
     input_cloudflare_api_key
 
-    echo
-    echo -e "${CYAN}${INFO}${NC} Setting up Cloudflare credentials..."
-    echo -e "${GRAY}  ${ARROW}${NC} Creating credentials directory"
     mkdir -p "$(dirname "$CREDENTIALS_PATH")"
 
     if [[ $CLOUDFLARE_API_KEY =~ [A-Z] ]]; then
-        echo -e "${GRAY}  ${ARROW}${NC} Detected API Token format"
         create_api_token_credentials
     else
-        echo -e "${GRAY}  ${ARROW}${NC} Detected Global API Key format"
         create_global_key_credentials
     fi
 
-    echo -e "${GRAY}  ${ARROW}${NC} Setting proper permissions"
     chmod 600 "$CREDENTIALS_PATH"
-    echo -e "${GREEN}${CHECK}${NC} Cloudflare credentials configured successfully!"
-    echo
-    echo -e "${BLUE}Credentials saved to: $CREDENTIALS_PATH${NC}"
     log_operation "SETUP: Created Cloudflare credentials"
+    echo
+}
+
+# Load existing credentials
+load_existing_credentials() {
+    if [ -f "$CREDENTIALS_PATH" ]; then
+        if grep -q "dns_cloudflare_email" "$CREDENTIALS_PATH"; then
+            CLOUDFLARE_EMAIL=$(grep "dns_cloudflare_email" "$CREDENTIALS_PATH" | cut -d'=' -f2 | xargs)
+            CLOUDFLARE_API_KEY=$(grep "dns_cloudflare_api_key" "$CREDENTIALS_PATH" | cut -d'=' -f2 | xargs)
+        elif grep -q "dns_cloudflare_api_token" "$CREDENTIALS_PATH"; then
+            CLOUDFLARE_API_KEY=$(grep "dns_cloudflare_api_token" "$CREDENTIALS_PATH" | cut -d'=' -f2 | xargs)
+        fi
+    fi
 }
 
 # Create API token credentials
@@ -632,6 +637,7 @@ handle_renewal_test_failure() {
     echo
     echo -e "${YELLOW}Certificate renewal may not work.${NC}"
     echo -e "${YELLOW}Check Cloudflare credentials and DNS settings.${NC}"
+    echo
     log_operation "IMPORT: Renewal test FAILED"
     
     echo -ne "${YELLOW}Continue despite renewal test failure? (y/N): ${NC}"
@@ -658,24 +664,6 @@ test_certificate_renewal() {
         fi
     fi
     echo -e "${GREEN}${CHECK}${NC} Renewal testing completed successfully!"
-}
-
-# Handle renewal test failure
-handle_renewal_test_failure() {
-    echo -e "${RED}${CROSS}${NC} Certificate renewal test FAILED"
-    echo
-    echo -e "${YELLOW}Certificate renewal may not work.${NC}"
-    echo -e "${YELLOW}Check Cloudflare credentials and DNS settings.${NC}"
-    log_operation "IMPORT: Renewal test FAILED"
-    
-    echo -ne "${YELLOW}Continue despite renewal test failure? (y/N): ${NC}"
-    read CONTINUE_ANYWAY
-    if [[ ! "$CONTINUE_ANYWAY" =~ ^[Yy]$ ]]; then
-        echo -e "${YELLOW}Import cancelled by user${NC}"
-        echo
-        rollback
-        exit 1
-    fi
 }
 
 # Cleanup temporary files
@@ -774,7 +762,6 @@ import_certificates() {
         set -e
     fi
     
-    echo
     echo -e "${PURPLE}===================${NC}"
     echo -e "${WHITE}CERTIFICATE IMPORT${NC}"
     if [ "$DRY_RUN" = true ]; then

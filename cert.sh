@@ -93,6 +93,7 @@ handle_user_choice() {
             ACTION="import"
             echo
             check_production_environment
+            echo
             setup_cloudflare_credentials
             ;;
         3)

@@ -1,8 +1,8 @@
 #!/bin/bash
 
-#==============================
+#===================================
 # LET'S ENCRYPT CERTIFICATE MANAGER
-#==============================
+#===================================
 
 # Color constants
 readonly RED='\033[0;31m'
@@ -62,9 +62,9 @@ check_production_environment() {
     fi
 }
 
-#====================
+#=====================
 # MAIN MENU FUNCTIONS
-#====================
+#=====================
 
 # Display main menu
 show_main_menu() {
@@ -93,6 +93,7 @@ handle_user_choice() {
             ACTION="import"
             echo
             check_production_environment
+            echo
             setup_cloudflare_credentials
             ;;
         3)
@@ -108,9 +109,9 @@ handle_user_choice() {
     esac
 }
 
-#=====================================
+#=================================
 # CLOUDFLARE CREDENTIAL FUNCTIONS
-#=====================================
+#=================================
 
 # Input Cloudflare email
 input_cloudflare_email() {
@@ -139,31 +140,36 @@ input_cloudflare_api_key() {
 # Setup Cloudflare credentials
 setup_cloudflare_credentials() {
     if [ -f "$CREDENTIALS_PATH" ]; then
+        load_existing_credentials
         return 0
     fi
 
     input_cloudflare_email
     input_cloudflare_api_key
 
-    echo
-    echo -e "${CYAN}${INFO}${NC} Setting up Cloudflare credentials..."
-    echo -e "${GRAY}  ${ARROW}${NC} Creating credentials directory"
     mkdir -p "$(dirname "$CREDENTIALS_PATH")"
 
     if [[ $CLOUDFLARE_API_KEY =~ [A-Z] ]]; then
-        echo -e "${GRAY}  ${ARROW}${NC} Detected API Token format"
         create_api_token_credentials
     else
-        echo -e "${GRAY}  ${ARROW}${NC} Detected Global API Key format"
         create_global_key_credentials
     fi
 
-    echo -e "${GRAY}  ${ARROW}${NC} Setting proper permissions"
     chmod 600 "$CREDENTIALS_PATH"
-    echo -e "${GREEN}${CHECK}${NC} Cloudflare credentials configured successfully!"
-    echo
-    echo -e "${BLUE}Credentials saved to: $CREDENTIALS_PATH${NC}"
     log_operation "SETUP: Created Cloudflare credentials"
+    echo
+}
+
+# Load existing credentials
+load_existing_credentials() {
+    if [ -f "$CREDENTIALS_PATH" ]; then
+        if grep -q "dns_cloudflare_email" "$CREDENTIALS_PATH"; then
+            CLOUDFLARE_EMAIL=$(grep "dns_cloudflare_email" "$CREDENTIALS_PATH" | cut -d'=' -f2 | xargs)
+            CLOUDFLARE_API_KEY=$(grep "dns_cloudflare_api_key" "$CREDENTIALS_PATH" | cut -d'=' -f2 | xargs)
+        elif grep -q "dns_cloudflare_api_token" "$CREDENTIALS_PATH"; then
+            CLOUDFLARE_API_KEY=$(grep "dns_cloudflare_api_token" "$CREDENTIALS_PATH" | cut -d'=' -f2 | xargs)
+        fi
+    fi
 }
 
 # Create API token credentials
@@ -201,9 +207,9 @@ validate_cloudflare_credentials() {
     fi
 }
 
-#=============================
+#================================
 # LOGGING AND ROLLBACK FUNCTIONS
-#=============================
+#================================
 
 # Logging function
 log_operation() {
@@ -631,6 +637,7 @@ handle_renewal_test_failure() {
     echo
     echo -e "${YELLOW}Certificate renewal may not work.${NC}"
     echo -e "${YELLOW}Check Cloudflare credentials and DNS settings.${NC}"
+    echo
     log_operation "IMPORT: Renewal test FAILED"
     
     echo -ne "${YELLOW}Continue despite renewal test failure? (y/N): ${NC}"
@@ -657,24 +664,6 @@ test_certificate_renewal() {
         fi
     fi
     echo -e "${GREEN}${CHECK}${NC} Renewal testing completed successfully!"
-}
-
-# Handle renewal test failure
-handle_renewal_test_failure() {
-    echo -e "${RED}${CROSS}${NC} Certificate renewal test FAILED"
-    echo
-    echo -e "${YELLOW}Certificate renewal may not work.${NC}"
-    echo -e "${YELLOW}Check Cloudflare credentials and DNS settings.${NC}"
-    log_operation "IMPORT: Renewal test FAILED"
-    
-    echo -ne "${YELLOW}Continue despite renewal test failure? (y/N): ${NC}"
-    read CONTINUE_ANYWAY
-    if [[ ! "$CONTINUE_ANYWAY" =~ ^[Yy]$ ]]; then
-        echo -e "${YELLOW}Import cancelled by user${NC}"
-        echo
-        rollback
-        exit 1
-    fi
 }
 
 # Cleanup temporary files
@@ -723,18 +712,13 @@ list_imported_certificates() {
     done
 }
 
-#=============================
+#======================
 # MAIN EXPORT FUNCTION
-#=============================
+#======================
 
 # Export certificates
 export_certificates() {
     set -e
-    
-    echo
-    echo -e "${PURPLE}===================${NC}"
-    echo -e "${WHITE}CERTIFICATE EXPORT${NC}"
-    echo -e "${PURPLE}===================${NC}"
     
     echo
     echo -e "${GREEN}Certificate Validation${NC}"
@@ -744,28 +728,17 @@ export_certificates() {
     validate_existing_certificates
 
     echo
-    echo -e "${GREEN}─────────────────────────────────────────────────${NC}"
-    echo -e "${GREEN}${CHECK}${NC} Certificate validation completed successfully!"
-    echo -e "${GREEN}─────────────────────────────────────────────────${NC}"
-
-    echo
     echo -e "${GREEN}Backup Creation${NC}"
     echo -e "${GREEN}===============${NC}"
     echo
 
     create_backup_archive
-
-    echo
-    echo -e "${GREEN}──────────────────────────────────────────${NC}"
-    echo -e "${GREEN}${CHECK}${NC} Backup creation completed successfully!"
-    echo -e "${GREEN}──────────────────────────────────────────${NC}"
-
     display_export_completion_info
 }
 
-#=============================
+#======================
 # MAIN IMPORT FUNCTION
-#=============================
+#======================
 
 # Import certificates
 import_certificates() {
@@ -773,7 +746,6 @@ import_certificates() {
         set -e
     fi
     
-    echo
     echo -e "${PURPLE}===================${NC}"
     echo -e "${WHITE}CERTIFICATE IMPORT${NC}"
     if [ "$DRY_RUN" = true ]; then
@@ -787,11 +759,6 @@ import_certificates() {
     echo
 
     verify_archive_integrity
-
-    echo
-    echo -e "${GREEN}───────────────────────────────────────────────${NC}"
-    echo -e "${GREEN}${CHECK}${NC} Archive verification completed successfully!"
-    echo -e "${GREEN}───────────────────────────────────────────────${NC}"
 
     echo
     echo -e "${GREEN}Certbot Installation${NC}"
@@ -809,21 +776,11 @@ import_certificates() {
     fi
 
     echo
-    echo -e "${GREEN}───────────────────────────────────────────────${NC}"
-    echo -e "${GREEN}${CHECK}${NC} Certbot installation completed successfully!"
-    echo -e "${GREEN}───────────────────────────────────────────────${NC}"
-
-    echo
     echo -e "${GREEN}Credential Validation${NC}"
     echo -e "${GREEN}=====================${NC}"
     echo
 
     validate_import_credentials
-
-    echo
-    echo -e "${GREEN}────────────────────────────────────────────────${NC}"
-    echo -e "${GREEN}${CHECK}${NC} Credential validation completed successfully!"
-    echo -e "${GREEN}────────────────────────────────────────────────${NC}"
 
     echo
     echo -e "${GREEN}Data Backup${NC}"
@@ -833,21 +790,11 @@ import_certificates() {
     backup_existing_data
 
     echo
-    echo -e "${GREEN}──────────────────────────────────────${NC}"
-    echo -e "${GREEN}${CHECK}${NC} Data backup completed successfully!"
-    echo -e "${GREEN}──────────────────────────────────────${NC}"
-
-    echo
     echo -e "${GREEN}Certificate Extraction${NC}"
     echo -e "${GREEN}======================${NC}"
     echo
 
     extract_certificate_archive
-
-    echo
-    echo -e "${GREEN}─────────────────────────────────────────────────${NC}"
-    echo -e "${GREEN}${CHECK}${NC} Certificate extraction completed successfully!"
-    echo -e "${GREEN}─────────────────────────────────────────────────${NC}"
 
     echo
     echo -e "${GREEN}Structure Fixing${NC}"
@@ -857,21 +804,11 @@ import_certificates() {
     fix_certificate_structure
 
     echo
-    echo -e "${GREEN}───────────────────────────────────────────${NC}"
-    echo -e "${GREEN}${CHECK}${NC} Structure fixing completed successfully!"
-    echo -e "${GREEN}───────────────────────────────────────────${NC}"
-
-    echo
     echo -e "${GREEN}Configuration Update${NC}"
     echo -e "${GREEN}====================${NC}"
     echo
 
     update_renewal_configurations
-
-    echo
-    echo -e "${GREEN}───────────────────────────────────────────────${NC}"
-    echo -e "${GREEN}${CHECK}${NC} Configuration update completed successfully!"
-    echo -e "${GREEN}───────────────────────────────────────────────${NC}"
 
     echo
     echo -e "${GREEN}Certificate Verification${NC}"
@@ -881,21 +818,11 @@ import_certificates() {
     verify_imported_certificates
 
     echo
-    echo -e "${GREEN}───────────────────────────────────────────────────${NC}"
-    echo -e "${GREEN}${CHECK}${NC} Certificate verification completed successfully!"
-    echo -e "${GREEN}───────────────────────────────────────────────────${NC}"
-
-    echo
     echo -e "${GREEN}Renewal Testing${NC}"
     echo -e "${GREEN}===============${NC}"
     echo
 
     test_certificate_renewal
-
-    echo
-    echo -e "${GREEN}──────────────────────────────────────────${NC}"
-    echo -e "${GREEN}${CHECK}${NC} Renewal testing completed successfully!"
-    echo -e "${GREEN}──────────────────────────────────────────${NC}"
 
     echo
     echo -e "${GREEN}Cleanup${NC}"
@@ -904,39 +831,12 @@ import_certificates() {
 
     cleanup_temporary_files
 
-    echo
-    echo -e "${GREEN}──────────────────────────────────${NC}"
-    echo -e "${GREEN}${CHECK}${NC} Cleanup completed successfully!"
-    echo -e "${GREEN}──────────────────────────────────${NC}"
-
     display_import_completion_info
 }
 
 #==================
 # MAIN ENTRY POINT
 #==================
-
-# Parse command line arguments
-parse_arguments() {
-    case "$1" in
-        "export"|"--export"|"-e")
-            ACTION="export"
-            ;;
-        "import"|"--import"|"-i")
-            ACTION="import"
-            setup_cloudflare_credentials
-            ;;
-        "--dry-run"|"-d")
-            ACTION="import"
-            DRY_RUN=true
-            echo -e "${YELLOW}Running in DRY-RUN mode (no changes will be made)${NC}"
-            ;;
-        *)
-            return 1
-            ;;
-    esac
-    return 0
-}
 
 # Main function
 main() {
@@ -946,17 +846,14 @@ main() {
     # Run critical checks
     check_root_privileges
     
-    # Parse command line arguments
-    if ! parse_arguments "$1"; then
-        # Interactive menu
-        while true; do
-            show_main_menu
-            echo -ne "${CYAN}Enter your choice (1-3): ${NC}"
-            read CHOICE
-            handle_user_choice "$CHOICE"
-            break
-        done
-    fi
+    # Interactive menu
+    while true; do
+        show_main_menu
+        echo -ne "${CYAN}Enter your choice (1-3): ${NC}"
+        read CHOICE
+        handle_user_choice "$CHOICE"
+        break
+    done
     
     # Execute the requested action
     case "$ACTION" in
@@ -971,5 +868,5 @@ main() {
     echo
 }
 
-# Execute main function with all arguments
-main "$@"
+# Main Script execution
+main

@@ -934,5 +934,5 @@ main() {
     echo
 }
 
-# Execute main function
+# Main Script execution
 main

@@ -721,11 +721,6 @@ export_certificates() {
     set -e
     
     echo
-    echo -e "${PURPLE}===================${NC}"
-    echo -e "${WHITE}CERTIFICATE EXPORT${NC}"
-    echo -e "${PURPLE}===================${NC}"
-    
-    echo
     echo -e "${GREEN}Certificate Validation${NC}"
     echo -e "${GREEN}=====================${NC}"
     echo
@@ -733,22 +728,11 @@ export_certificates() {
     validate_existing_certificates
 
     echo
-    echo -e "${GREEN}─────────────────────────────────────────────────${NC}"
-    echo -e "${GREEN}${CHECK}${NC} Certificate validation completed successfully!"
-    echo -e "${GREEN}─────────────────────────────────────────────────${NC}"
-
-    echo
     echo -e "${GREEN}Backup Creation${NC}"
     echo -e "${GREEN}===============${NC}"
     echo
 
     create_backup_archive
-
-    echo
-    echo -e "${GREEN}──────────────────────────────────────────${NC}"
-    echo -e "${GREEN}${CHECK}${NC} Backup creation completed successfully!"
-    echo -e "${GREEN}──────────────────────────────────────────${NC}"
-
     display_export_completion_info
 }
 
@@ -777,11 +761,6 @@ import_certificates() {
     verify_archive_integrity
 
     echo
-    echo -e "${GREEN}───────────────────────────────────────────────${NC}"
-    echo -e "${GREEN}${CHECK}${NC} Archive verification completed successfully!"
-    echo -e "${GREEN}───────────────────────────────────────────────${NC}"
-
-    echo
     echo -e "${GREEN}Certbot Installation${NC}"
     echo -e "${GREEN}====================${NC}"
     echo
@@ -797,21 +776,11 @@ import_certificates() {
     fi
 
     echo
-    echo -e "${GREEN}───────────────────────────────────────────────${NC}"
-    echo -e "${GREEN}${CHECK}${NC} Certbot installation completed successfully!"
-    echo -e "${GREEN}───────────────────────────────────────────────${NC}"
-
-    echo
     echo -e "${GREEN}Credential Validation${NC}"
     echo -e "${GREEN}=====================${NC}"
     echo
 
     validate_import_credentials
-
-    echo
-    echo -e "${GREEN}────────────────────────────────────────────────${NC}"
-    echo -e "${GREEN}${CHECK}${NC} Credential validation completed successfully!"
-    echo -e "${GREEN}────────────────────────────────────────────────${NC}"
 
     echo
     echo -e "${GREEN}Data Backup${NC}"
@@ -821,21 +790,11 @@ import_certificates() {
     backup_existing_data
 
     echo
-    echo -e "${GREEN}──────────────────────────────────────${NC}"
-    echo -e "${GREEN}${CHECK}${NC} Data backup completed successfully!"
-    echo -e "${GREEN}──────────────────────────────────────${NC}"
-
-    echo
     echo -e "${GREEN}Certificate Extraction${NC}"
     echo -e "${GREEN}======================${NC}"
     echo
 
     extract_certificate_archive
-
-    echo
-    echo -e "${GREEN}─────────────────────────────────────────────────${NC}"
-    echo -e "${GREEN}${CHECK}${NC} Certificate extraction completed successfully!"
-    echo -e "${GREEN}─────────────────────────────────────────────────${NC}"
 
     echo
     echo -e "${GREEN}Structure Fixing${NC}"
@@ -845,21 +804,11 @@ import_certificates() {
     fix_certificate_structure
 
     echo
-    echo -e "${GREEN}───────────────────────────────────────────${NC}"
-    echo -e "${GREEN}${CHECK}${NC} Structure fixing completed successfully!"
-    echo -e "${GREEN}───────────────────────────────────────────${NC}"
-
-    echo
     echo -e "${GREEN}Configuration Update${NC}"
     echo -e "${GREEN}====================${NC}"
     echo
 
     update_renewal_configurations
-
-    echo
-    echo -e "${GREEN}───────────────────────────────────────────────${NC}"
-    echo -e "${GREEN}${CHECK}${NC} Configuration update completed successfully!"
-    echo -e "${GREEN}───────────────────────────────────────────────${NC}"
 
     echo
     echo -e "${GREEN}Certificate Verification${NC}"
@@ -869,11 +818,6 @@ import_certificates() {
     verify_imported_certificates
 
     echo
-    echo -e "${GREEN}───────────────────────────────────────────────────${NC}"
-    echo -e "${GREEN}${CHECK}${NC} Certificate verification completed successfully!"
-    echo -e "${GREEN}───────────────────────────────────────────────────${NC}"
-
-    echo
     echo -e "${GREEN}Renewal Testing${NC}"
     echo -e "${GREEN}===============${NC}"
     echo
@@ -881,21 +825,11 @@ import_certificates() {
     test_certificate_renewal
 
     echo
-    echo -e "${GREEN}──────────────────────────────────────────${NC}"
-    echo -e "${GREEN}${CHECK}${NC} Renewal testing completed successfully!"
-    echo -e "${GREEN}──────────────────────────────────────────${NC}"
-
-    echo
     echo -e "${GREEN}Cleanup${NC}"
     echo -e "${GREEN}=======${NC}"
     echo
 
     cleanup_temporary_files
-
-    echo
-    echo -e "${GREEN}──────────────────────────────────${NC}"
-    echo -e "${GREEN}${CHECK}${NC} Cleanup completed successfully!"
-    echo -e "${GREEN}──────────────────────────────────${NC}"
 
     display_import_completion_info
 }

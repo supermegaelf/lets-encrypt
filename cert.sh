@@ -904,28 +904,6 @@ import_certificates() {
 # MAIN ENTRY POINT
 #==================
 
-# Parse command line arguments
-parse_arguments() {
-    case "$1" in
-        "export"|"--export"|"-e")
-            ACTION="export"
-            ;;
-        "import"|"--import"|"-i")
-            ACTION="import"
-            setup_cloudflare_credentials
-            ;;
-        "--dry-run"|"-d")
-            ACTION="import"
-            DRY_RUN=true
-            echo -e "${YELLOW}Running in DRY-RUN mode (no changes will be made)${NC}"
-            ;;
-        *)
-            return 1
-            ;;
-    esac
-    return 0
-}
-
 # Main function
 main() {
     # Setup error handling
@@ -934,17 +912,14 @@ main() {
     # Run critical checks
     check_root_privileges
     
-    # Parse command line arguments
-    if ! parse_arguments "$1"; then
-        # Interactive menu
-        while true; do
-            show_main_menu
-            echo -ne "${CYAN}Enter your choice (1-3): ${NC}"
-            read CHOICE
-            handle_user_choice "$CHOICE"
-            break
-        done
-    fi
+    # Interactive menu
+    while true; do
+        show_main_menu
+        echo -ne "${CYAN}Enter your choice (1-3): ${NC}"
+        read CHOICE
+        handle_user_choice "$CHOICE"
+        break
+    done
     
     # Execute the requested action
     case "$ACTION" in
@@ -959,5 +934,5 @@ main() {
     echo
 }
 
-# Execute main function with all arguments
-main "$@"
+# Execute main function
+main

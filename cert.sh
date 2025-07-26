@@ -1,8 +1,8 @@
 #!/bin/bash
 
-#==============================
+#===================================
 # LET'S ENCRYPT CERTIFICATE MANAGER
-#==============================
+#===================================
 
 # Color constants
 readonly RED='\033[0;31m'
@@ -62,9 +62,9 @@ check_production_environment() {
     fi
 }
 
-#====================
+#=====================
 # MAIN MENU FUNCTIONS
-#====================
+#=====================
 
 # Display main menu
 show_main_menu() {
@@ -109,9 +109,9 @@ handle_user_choice() {
     esac
 }
 
-#=====================================
+#=================================
 # CLOUDFLARE CREDENTIAL FUNCTIONS
-#=====================================
+#=================================
 
 # Input Cloudflare email
 input_cloudflare_email() {
@@ -207,9 +207,9 @@ validate_cloudflare_credentials() {
     fi
 }
 
-#=============================
+#================================
 # LOGGING AND ROLLBACK FUNCTIONS
-#=============================
+#================================
 
 # Logging function
 log_operation() {
@@ -712,9 +712,9 @@ list_imported_certificates() {
     done
 }
 
-#=============================
+#======================
 # MAIN EXPORT FUNCTION
-#=============================
+#======================
 
 # Export certificates
 export_certificates() {
@@ -752,9 +752,9 @@ export_certificates() {
     display_export_completion_info
 }
 
-#=============================
+#======================
 # MAIN IMPORT FUNCTION
-#=============================
+#======================
 
 # Import certificates
 import_certificates() {

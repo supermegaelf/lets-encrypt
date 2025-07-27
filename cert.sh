@@ -719,7 +719,11 @@ list_imported_certificates() {
 # Export certificates
 export_certificates() {
     set -e
-    
+
+    echo -e "${PURPLE}===================${NC}"
+    echo -e "${WHITE}Certificate export${NC}"
+    echo -e "${PURPLE}===================${NC}"
+
     echo
     echo -e "${GREEN}Certificate Validation${NC}"
     echo -e "${GREEN}=====================${NC}"

@@ -720,6 +720,7 @@ list_imported_certificates() {
 export_certificates() {
     set -e
 
+    echo
     echo -e "${PURPLE}===================${NC}"
     echo -e "${WHITE}Certificate export${NC}"
     echo -e "${PURPLE}===================${NC}"

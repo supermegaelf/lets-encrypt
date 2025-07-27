@@ -1,8 +1,8 @@
 #!/bin/bash
 
-#===================================
-# LET'S ENCRYPT CERTIFICATE MANAGER
-#===================================
+#=======================
+# LET'S ENCRYPT MANAGER
+#=======================
 
 # Color constants
 readonly RED='\033[0;31m'
@@ -69,9 +69,9 @@ check_production_environment() {
 # Display main menu
 show_main_menu() {
     echo
-    echo -e "${PURPLE}==========================${NC}"
-    echo -e "${WHITE}LET'S ENCRYPT CERTIFICATE${NC}"
-    echo -e "${PURPLE}==========================${NC}"
+    echo -e "${PURPLE}======================${NC}"
+    echo -e "${WHITE}LET'S ENCRYPT MANAGER${NC}"
+    echo -e "${PURPLE}======================${NC}"
     echo
     echo -e "${CYAN}Please select an action:${NC}"
     echo

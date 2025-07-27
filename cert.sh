@@ -682,14 +682,14 @@ cleanup_temporary_files() {
 # Display import completion info
 display_import_completion_info() {
     echo
-    echo -e "${PURPLE}====================${NC}"
+    echo -e "${PURPLE}===================${NC}"
     if [ "$DRY_RUN" = true ]; then
         echo -e "${GREEN}${CHECK}${NC} IMPORT DRY-RUN COMPLETED!"
         echo -e "${CYAN}                No changes were made${NC}"
     else
-        echo -e "${GREEN}${CHECK}${NC} IMPORT COMPLETED!"
+        echo -e "${GREEN}${CHECK}${NC} Import complete!"
     fi
-    echo -e "${PURPLE}====================${NC}"
+    echo -e "${PURPLE}===================${NC}"
     echo
     
     if [ "$DRY_RUN" != true ]; then

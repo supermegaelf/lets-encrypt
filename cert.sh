@@ -307,9 +307,9 @@ create_backup_archive() {
 # Display export completion info
 display_export_completion_info() {
     echo
-    echo -e "${PURPLE}====================${NC}"
-    echo -e "${GREEN}${CHECK}${NC} EXPORT COMPLETED!"
-    echo -e "${PURPLE}====================${NC}"
+    echo -e "${PURPLE}===================${NC}"
+    echo -e "${GREEN}${CHECK}${NC} Export complete!"
+    echo -e "${PURPLE}===================${NC}"
     echo
     echo -e "${CYAN}Export Information:${NC}"
     echo -e "${WHITE}• Archive size: $ARCHIVE_SIZE${NC}"
@@ -747,7 +747,7 @@ import_certificates() {
     fi
     
     echo -e "${PURPLE}===================${NC}"
-    echo -e "${WHITE}CERTIFICATE IMPORT${NC}"
+    echo -e "${WHITE}Certificate import${NC}"
     if [ "$DRY_RUN" = true ]; then
         echo -e "${YELLOW}                  (DRY-RUN MODE)${NC}"
     fi

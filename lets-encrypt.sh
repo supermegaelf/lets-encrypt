@@ -244,7 +244,7 @@ rollback() {
 }
 
 #==============================
-# CERTIFICATE EXPORT FUNCTIONS
+# EXPORT CERTIFICATE FUNCTIONS
 #==============================
 
 # Validate existing certificates
@@ -317,7 +317,7 @@ display_export_completion_info() {
 }
 
 #==============================
-# CERTIFICATE IMPORT FUNCTIONS
+# IMPORT CERTIFICATE FUNCTIONS
 #==============================
 
 # Verify archive integrity
@@ -722,7 +722,7 @@ export_certificates() {
 
     echo
     echo -e "${PURPLE}===================${NC}"
-    echo -e "${WHITE}Certificate export${NC}"
+    echo -e "${WHITE}Export certificate${NC}"
     echo -e "${PURPLE}===================${NC}"
 
     echo
@@ -752,7 +752,7 @@ import_certificates() {
     fi
     
     echo -e "${PURPLE}===================${NC}"
-    echo -e "${WHITE}Certificate import${NC}"
+    echo -e "${WHITE}Import Certificate${NC}"
     if [ "$DRY_RUN" = true ]; then
         echo -e "${YELLOW}                  (DRY-RUN MODE)${NC}"
     fi

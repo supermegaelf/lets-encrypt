@@ -51,17 +51,6 @@ check_command() {
     fi
 }
 
-# Check production environment
-check_production_environment() {
-    echo -ne "${YELLOW}Are you sure you want to continue? (y/N): ${NC}"
-    read -r CONFIRM
-    if [[ ! "$CONFIRM" =~ ^[Yy]$ ]]; then
-        echo -e "${YELLOW}Operation cancelled by user${NC}"
-        echo
-        exit 0
-    fi
-}
-
 #=====================
 # MAIN MENU FUNCTIONS
 #=====================
@@ -91,8 +80,6 @@ handle_user_choice() {
             ;;
         2)
             ACTION="import"
-            echo
-            check_production_environment
             echo
             setup_cloudflare_credentials
             ;;

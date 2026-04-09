@@ -23,7 +23,7 @@ readonly INFO="*"
 readonly ARROW="→"
 
 # Global variables
-BACKUP_FILE="/root/letsencrypt-backup.tar.gz"
+BACKUP_FILE=""
 BACKUP_TIMESTAMP=$(date +%Y%m%d_%H%M%S)
 CREDENTIALS_PATH="/root/.secrets/certbot/cloudflare.ini"
 ACTION=""
@@ -39,6 +39,63 @@ check_root_privileges() {
         echo -e "${RED}${CROSS}${NC} This script must be run as root for production safety"
         echo
         exit 1
+    fi
+}
+
+# Detect primary domain from live certificates
+detect_primary_domain() {
+    ls -1 /etc/letsencrypt/live 2>/dev/null | grep -v README | head -1
+}
+
+# Set backup filename based on domain
+set_export_backup_filename() {
+    local domain
+    domain=$(detect_primary_domain)
+    if [ -z "$domain" ]; then
+        echo -e "${RED}${CROSS}${NC} Cannot determine domain name for backup filename"
+        echo
+        exit 1
+    fi
+    BACKUP_FILE="/root/letsencrypt-${domain}.tar.gz"
+}
+
+# Find and select backup archive for import
+find_backup_file() {
+    local files
+    files=$(ls /root/letsencrypt-*.tar.gz 2>/dev/null)
+    if [ -z "$files" ]; then
+        echo -e "${RED}${CROSS}${NC} No backup archive found in /root/"
+        echo -e "${RED}Please transfer a letsencrypt-<domain>.tar.gz file to /root/ first${NC}"
+        echo
+        exit 1
+    fi
+
+    local count
+    count=$(echo "$files" | wc -l)
+
+    if [ "$count" -eq 1 ]; then
+        BACKUP_FILE="$files"
+        echo -e "${GREEN}${CHECK}${NC} Found archive: $(basename "$BACKUP_FILE")"
+    else
+        echo -e "${CYAN}Multiple backup archives found:${NC}"
+        echo
+        local i=1
+        local file_array=()
+        while IFS= read -r file; do
+            echo -e "${GREEN}${i}.${NC} $(basename "$file")"
+            file_array+=("$file")
+            ((i++))
+        done <<< "$files"
+        echo
+        echo -ne "${CYAN}Select archive (1-$((i-1))): ${NC}"
+        read selection
+        if [[ "$selection" =~ ^[0-9]+$ ]] && [ "$selection" -ge 1 ] && [ "$selection" -le "${#file_array[@]}" ]; then
+            BACKUP_FILE="${file_array[$((selection-1))]}"
+        else
+            echo -e "${RED}${CROSS}${NC} Invalid selection"
+            echo
+            exit 1
+        fi
     fi
 }
 
@@ -718,6 +775,7 @@ export_certificates() {
     echo
 
     validate_existing_certificates
+    set_export_backup_filename
 
     echo
     echo -e "${GREEN}Backup Creation${NC}"
@@ -744,6 +802,13 @@ import_certificates() {
         echo -e "${YELLOW}                  (DRY-RUN MODE)${NC}"
     fi
     echo -e "${PURPLE}===================${NC}"
+
+    echo
+    echo -e "${GREEN}Archive Selection${NC}"
+    echo -e "${GREEN}=================${NC}"
+    echo
+
+    find_backup_file
 
     echo
     echo -e "${GREEN}Archive Verification${NC}"
